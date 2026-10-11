@@ -4,8 +4,6 @@
 
 CYBERCORE is a single-page, production-ready front-end experience for a technology festival / cyber-tech brand. It is a **fictional interface**: the telemetry, node readouts and system status lines are design storytelling, not real product metrics.
 
-**Live repository:** https://github.com/panditbhavik15/techfest
-
 ---
 
 ## Features
