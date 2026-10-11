@@ -111,3 +111,39 @@ export function useActiveSection(ids: string[]): string {
 
   return active
 }
+
+export const THEME_KEY = 'cybercore-theme'
+export type Theme = 'light' | 'dark'
+
+function storedTheme(): Theme {
+  try {
+    return window.localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light'
+  } catch {
+    return 'light'
+  }
+}
+
+/** Light is the product default; only an explicit stored choice can start dark. */
+export function useTheme() {
+  const [theme, setTheme] = useState<Theme>(storedTheme)
+
+  useEffect(() => {
+    const root = document.documentElement
+    const dark = theme === 'dark'
+    root.classList.toggle('dark', dark)
+    root.style.colorScheme = theme
+    document
+      .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+      ?.setAttribute('content', dark ? '#04060c' : '#ffffff')
+    try {
+      window.localStorage.setItem(THEME_KEY, theme)
+    } catch {
+      /* storage disabled — the theme still applies for this visit */
+    }
+  }, [theme])
+
+  return {
+    theme,
+    toggleTheme: () => setTheme((value) => (value === 'dark' ? 'light' : 'dark')),
+  }
+}

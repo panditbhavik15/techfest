@@ -26,7 +26,7 @@ export function Footer() {
         </div>
 
         <nav aria-label="Footer">
-          <h2 className="font-mono text-xs tracking-[0.24em] text-white uppercase">Navigation</h2>
+          <h2 className="font-mono text-xs tracking-[0.24em] text-ink uppercase">Navigation</h2>
           <ul className="mt-5 space-y-3">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
@@ -42,7 +42,7 @@ export function Footer() {
         </nav>
 
         <div>
-          <h2 className="font-mono text-xs tracking-[0.24em] text-white uppercase">Uplink</h2>
+          <h2 className="font-mono text-xs tracking-[0.24em] text-ink uppercase">Uplink</h2>
           <ul className="mt-5 space-y-3 text-sm">
             <li>
               <a
@@ -70,7 +70,7 @@ export function Footer() {
 
       <div className="border-t border-line/70">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-5 py-6 text-center sm:flex-row sm:px-8 sm:text-left">
-          <p className="text-xs tracking-wide text-steel/70">
+          <p className="text-xs tracking-wide text-steel">
             © {year} CYBERCORE · A fictional cybernetic interface concept. All rights reserved.
           </p>
           <p className={hudLabel}>Build 2.4.1 · Node 07</p>

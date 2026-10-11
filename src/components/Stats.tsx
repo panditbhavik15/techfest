@@ -30,7 +30,7 @@ export function Stats() {
             <MetricCell key={metric.label} metric={metric} active={active} />
           ))}
         </ul>
-        <p className="border-t border-line/60 py-3 text-center font-mono text-[0.5625rem] tracking-[0.2em] text-steel/50 uppercase">
+        <p className="border-t border-line/60 py-3 text-center font-mono text-[0.5625rem] tracking-[0.2em] text-steel uppercase">
           Illustrative interface telemetry — fictional diagnostics, not real-world performance claims
         </p>
       </div>
@@ -48,7 +48,7 @@ function MetricCell({ metric, active }: { metric: Metric; active: boolean }) {
   return (
     <li className="flex flex-col items-center gap-2 border-line/60 px-4 py-8 text-center max-lg:even:border-l max-lg:nth-[n+3]:border-t lg:border-l lg:first:border-l-0 lg:py-10">
       <Icon className="size-5 text-neon/70" aria-hidden="true" />
-      <span className="font-display text-3xl font-bold tracking-tight text-white lg:text-4xl">
+      <span className="font-display text-3xl font-bold tracking-tight text-ink lg:text-4xl">
         {counter ? counted : metric.value}
         {metric.unit ? <span className="text-neon">{metric.unit}</span> : null}
       </span>

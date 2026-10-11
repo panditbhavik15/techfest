@@ -1,6 +1,6 @@
 # CYBERCORE — Cyborg-Themed Landing Page
 
-> A futuristic, responsive cyborg-themed landing page featuring cyberpunk visuals, immersive animations, and interactive UI components.
+> A futuristic, responsive cyborg-themed landing page with a clean white default theme, a working light/dark switch, immersive animations and interactive UI components.
 
 CYBERCORE is a single-page, production-ready front-end experience for a technology festival / cyber-tech brand. It is a **fictional interface**: the telemetry, node readouts and system status lines are design storytelling, not real product metrics.
 
@@ -8,6 +8,7 @@ CYBERCORE is a single-page, production-ready front-end experience for a technolo
 
 ## Features
 
+- **Two themes, one click** — the page ships **light by default** (pure white, near-black type, silver edges) and a `SWITCH TO DARK MODE` button in the top-right corner of the header converts the whole site to the near-black HUD palette, relabelling itself `SWITCH TO LIGHT MODE`. The choice is stored in `localStorage` and re-applied by a pre-paint script so a saved theme never flashes. See [Theming](#theming).
 - **Sticky HUD navigation** — glass background that solidifies on scroll, active-section highlighting, `ENTER THE SYSTEM` CTA, and a working mobile menu (`Escape` closes, `aria-expanded`/`inert` state, tap targets ≥ 44 px).
 - **Full-screen hero** — `HUMANITY / REDEFINED.` display lockup, generated cyborg portrait inside a HUD frame, rotating targeting rings, scanning beam, floating particles, `SYSTEM ONLINE / AI CORE ACTIVE / NEURAL LINK STABLE` readouts and a scroll cue.
 - **Telemetry strip** — animated count-up for `99.9%` and `24/7`, plus `AI-CORE` and `∞` cells, with an explicit note that the numbers are fictional interface telemetry.
@@ -67,13 +68,14 @@ npm run dev       # start the dev server (http://localhost:5173)
     ├── index.css              # Tailwind import, design tokens, keyframes, HUD styles
     ├── fonts.css              # @font-face rules for the self-hosted subsets
     ├── fonts/                 # .woff2 subsets
-    ├── hooks.ts               # useReducedMotion, useFinePointer, useInView, useCountUp, useActiveSection
+    ├── hooks.ts               # useTheme, useReducedMotion, useFinePointer, useInView, useCountUp, useActiveSection
     ├── lib/
     │   ├── site.ts            # nav model, section ids, repository URL
     │   └── styles.ts          # shared button / HUD label class tokens
     ├── assets/                # hero + experience WebP images (2 widths each)
     └── components/
         ├── Navbar.tsx
+        ├── ThemeToggle.tsx    # light/dark switch, wired to localStorage
         ├── Hero.tsx
         ├── Stats.tsx
         ├── Technology.tsx
@@ -87,18 +89,48 @@ npm run dev       # start the dev server (http://localhost:5173)
 
 ## Design system
 
-Tokens live in `src/index.css` under `@theme`:
+Every colour in the UI is a **semantic token**, never a literal. `src/index.css` declares two value sets and maps them onto Tailwind utilities through `@theme`:
 
-- **Surfaces** — `void #04060c`, `abyss #070b16`, `graphite #0b1120`, `panel #0f1728`, `line #1c2a45`
-- **Accents** — `neon #2ee6ff`, `electric #4c7dff`, `plasma #a855f7`, `amber #ffb020` (standby states)
-- **Type** — `--font-display` (Chakra Petch) for headings, `--font-body` (Rajdhani) for copy, `--font-mono` (Share Tech Mono) for HUD labels
-- **Type scale** — `clamp()` driven hero lockup (`2.9rem → 5.75rem`), section headings at `text-4xl/5xl`, HUD labels at 10–11 px with wide tracking
+| Token | Role | Light (default) | Dark (`html.dark`) |
+| --- | --- | --- | --- |
+| `void` | page background | `#ffffff` | `#04060c` |
+| `abyss` | banded sections | `#f2f5fa` | `#070b16` |
+| `graphite` / `panel` | cards, dialogs | `#f7f9fc` / `#ffffff` | `#0b1120` / `#0f1728` |
+| `line` | borders, dividers | `#d5dde8` (silver) | `#1c2a45` |
+| `ink` | headings, wordmark | `#060a12` | `#ffffff` |
+| `mist` | body copy, ghost buttons | `#1b2637` | `#cfdcf0` |
+| `steel` | muted HUD labels | `#4a5a71` | `#8ea3c4` |
+| `neon` | primary accent | `#0a6a83` | `#2ee6ff` |
+| `electric` / `plasma` | gradients, secondary accents | `#2f6fed` / `#7c3aed` | `#4c7dff` / `#a855f7` |
+| `amber` | standby / attention states | `#b45309` | `#ffb020` |
 
-Custom classes are declared inside `@layer components` so Tailwind utilities always win — that is what lets `.hud-panel` be re-positioned with `absolute`/`relative` utilities per use site.
+- **Type** — `--font-display` (Chakra Petch) for headings, `--font-body` (Rajdhani) for copy, `--font-mono` (Share Tech Mono) for HUD labels.
+- **Type scale** — `clamp()` driven hero lockup (`2.9rem → 5.75rem`), section headings at `text-4xl/5xl`, HUD labels at 10–11 px with wide tracking.
+- **Effects** — shadows, grid lines, gradient washes and glows are their own variables (`--s-hud`, `--grid-line`, `--wash-*`, `--glow-*`), so the dark-mode bloom becomes a soft silver tint in light mode instead of an unreadable glare.
+- Custom classes live inside `@layer components` so Tailwind utilities always win — that is what lets `.hud-panel` be re-positioned with `absolute`/`relative` utilities per use site.
+
+## Theming
+
+```
+:root          { --c-void: #ffffff; … }   /* light — the default */
+html.dark      { --c-void: #04060c; … }   /* dark  */
+@theme         { --color-void: var(--c-void); … }
+```
+
+1. `useTheme()` (`src/hooks.ts`) keeps the current theme in React state, toggles the `dark` class on `<html>`, sets `color-scheme`, syncs the `theme-color` meta tag and writes `localStorage['cybercore-theme']`.
+2. A tiny inline script in `index.html` reads the same key **before first paint**, so reloading in dark mode never shows a white frame.
+3. Because `@theme` maps the utilities onto those variables, a single class flips everything at once — backgrounds, borders, text, `color-mix()` opacity variants, SVG `fill`/`stroke` classes and gradients. No component carries a hard-coded colour: the only literals in `src/` are the two `theme-color` values written by `useTheme()`.
+4. `@custom-variant dark` is redefined to the class, so any future `dark:` utility follows the user's choice rather than the operating-system setting.
+5. Light is the deliberate default: the stored value is the only thing that can start the page dark (the OS `prefers-color-scheme` is not consulted on first visit).
+6. The crossfade is a zero-specificity `:where()` transition on colour-ish properties, so per-element `transition-*` utilities still win and `prefers-reduced-motion` cancels the animation entirely.
+
+To add a third theme, copy the `html.dark` block to `html.oled` with new values — no component changes required.
 
 ## Accessibility
 
+- Both themes were audited programmatically: **122 visible text nodes per theme all meet WCAG 2 AA** (4.5:1 for small text, 3:1 for large) against their composited backgrounds; accent colours were darkened for light mode rather than reused from the dark palette.
 - One `h1`, section `h2`s, card `h3`s; landmarks (`header`, `nav`, `main`, `footer`) plus a skip-to-content link.
+- The theme control is a real `button` with an `aria-label`/`title` that states the full action (`Switch to Dark Mode` / `Switch to Light Mode`) at every width; the visible text shortens on narrow screens so the header never pushes the menu button out of reach.
 - All interactive elements are real `button`/`a` elements with visible `:focus-visible` outlines and ≥ 40 px touch targets.
 - The system panel uses `aria-pressed` on the toggle, `role="progressbar"` with live `aria-valuenow`, and an `aria-live="polite"` status line.
 - The modal uses `role="dialog"`, `aria-modal`, initial focus, a Tab focus trap, `Escape`/backdrop close and focus restoration.
@@ -114,11 +146,29 @@ Custom classes are declared inside `@layer components` so Tailwind utilities alw
 
 ## Screenshots
 
-_Add actual captures here once the demo recording pass is complete (hero, technology, interactive system panel, mobile viewport)._
+Captured from the production build at 1440 px (desktop) and 390 px (mobile). Light is the default theme; the last row shows the same page after one click of the header switch.
 
-| Hero | Technology | System interface | Mobile |
-| --- | --- | --- | --- |
-| `docs/hero.png` | `docs/technology.png` | `docs/interface.png` | `docs/mobile.png` |
+| Hero | Technology |
+| --- | --- |
+| ![Hero section](docs/hero.png) | ![Technology modules](docs/technology.png) |
+
+| System interface (standby) | System interface (activated) |
+| --- | --- |
+| ![Control panel in standby](docs/interface.png) | ![Control panel after ACTIVATE SYSTEM](docs/interface-active.png) |
+
+| Experience | Call to action |
+| --- | --- |
+| ![Immersive experience](docs/experience.png) | ![Final call to action](docs/call-to-action.png) |
+
+| Footer | Mobile | Mobile menu |
+| --- | --- | --- |
+| ![Footer](docs/footer.png) | ![Mobile viewport](docs/mobile.png) | ![Mobile navigation open](docs/mobile-menu.png) |
+
+**Dark theme**
+
+| Hero | Interactive panel | Modal dialog |
+| --- | --- | --- |
+| ![Hero in dark mode](docs/dark-hero.png) | ![Control panel in dark mode](docs/dark-interface.png) | ![Dialog in dark mode](docs/dark-dialog.png) |
 
 ## Deployment
 
@@ -147,7 +197,7 @@ Not generated automatically. To capture the submission clip (30–60 s):
 
 1. `npm run dev` and open the printed URL.
 2. Record the viewport (OBS Studio, or Windows `Win + Alt + R`).
-3. Show the hero, scroll through telemetry → technology → interactive panel, click `ACTIVATE SYSTEM`, then resize to a phone width (~390 px) and open the mobile menu.
+3. Show the hero, click `SWITCH TO DARK MODE` and back, scroll through telemetry → technology → interactive panel, click `ACTIVATE SYSTEM`, then resize to a phone width (~390 px) and open the mobile menu.
 4. Upload to Google Drive → **Share** → *Anyone with the link* / *Viewer* → verify the link opens in an incognito window.
 
 ## Credit & license

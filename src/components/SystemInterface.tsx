@@ -72,7 +72,7 @@ export function SystemInterface() {
                     key={`${blip.top}-${blip.left}`}
                     aria-hidden="true"
                     className={`anim-pulse absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full ${
-                      active ? 'bg-neon shadow-[0_0_12px_#2ee6ff]' : 'bg-steel/50'
+                      active ? 'bg-neon shadow-[0_0_12px_var(--color-neon)]' : 'bg-steel/50'
                     }`}
                     style={{ top: blip.top, left: blip.left }}
                   />
@@ -105,7 +105,7 @@ export function SystemInterface() {
             <div className="flex flex-col gap-8">
               <div>
                 <div className="flex items-center justify-between gap-4">
-                  <h3 className="flex items-center gap-2 font-mono text-xs tracking-[0.24em] text-white uppercase">
+                  <h3 className="flex items-center gap-2 font-mono text-xs tracking-[0.24em] text-ink uppercase">
                     <Gauge className="size-4 text-neon" aria-hidden="true" />
                     Diagnostics
                   </h3>
@@ -150,8 +150,8 @@ export function SystemInterface() {
                   onClick={() => setActive((value) => !value)}
                   className={`inline-flex min-h-12 items-center gap-3 border px-7 py-3 font-mono text-xs tracking-[0.22em] uppercase transition-colors duration-300 ${
                     active
-                      ? 'border-neon bg-neon/15 text-neon shadow-[0_0_34px_-10px_rgb(46_230_255/0.9)]'
-                      : 'border-line bg-white/[0.02] text-mist hover:border-neon/60 hover:text-neon'
+                      ? 'border-neon bg-neon/15 text-neon shadow-[0_0_34px_-10px_var(--glow-strong)]'
+                      : 'border-line bg-ink/5 text-mist hover:border-neon/60 hover:text-neon'
                   }`}
                 >
                   <Power className="size-4" aria-hidden="true" />
@@ -171,15 +171,15 @@ export function SystemInterface() {
               </div>
 
               <div className="border border-line/70 bg-void/60 p-4 font-mono text-xs leading-relaxed text-steel">
-                <p className="flex items-center gap-2 text-[0.625rem] tracking-[0.2em] text-steel/70 uppercase">
+                <p className="flex items-center gap-2 text-[0.625rem] tracking-[0.2em] text-steel uppercase">
                   <Terminal className="size-3.5" aria-hidden="true" />
                   system log
                 </p>
                 <ul className="mt-3 space-y-1">
                   {(active ? LOG_ACTIVE : LOG_STANDBY).map((line, index) => (
                     <li key={line}>
-                      <span className="text-neon/70">{String(index + 1).padStart(2, '0')}</span>
-                      <span className="text-steel/40"> › </span>
+                      <span className="text-neon">{String(index + 1).padStart(2, '0')}</span>
+                      <span className="text-steel"> › </span>
                       {line}
                     </li>
                   ))}
@@ -200,13 +200,13 @@ function LinkGraph({ active }: { active: boolean }) {
     { x: 160, y: 96, label: 'MOT' },
     { x: 280, y: 60, label: 'LINK' },
   ]
-  const stroke = active ? '#2ee6ff' : '#1c2a45'
+  const stroke = active ? 'stroke-neon' : 'stroke-line'
 
   return (
     <figure className="border border-line/70 bg-void/50 p-4">
       <figcaption className={hudLabel}>Connection topology</figcaption>
       <svg viewBox="0 0 320 120" className="mt-3 h-28 w-full" role="img" aria-label="Four node diagram linking the core to vision, motion and uplink modules">
-        <g stroke={stroke} strokeWidth="1.5" fill="none" className={active ? 'anim-dash' : ''}>
+        <g strokeWidth="1.5" fill="none" className={active ? `anim-dash ${stroke}` : stroke}>
           <path d="M40 60 L160 24" />
           <path d="M40 60 L160 96" />
           <path d="M160 24 L280 60" />
@@ -218,19 +218,16 @@ function LinkGraph({ active }: { active: boolean }) {
               cx={node.x}
               cy={node.y}
               r="7"
-              fill={active ? '#2ee6ff' : '#0f1728'}
-              stroke={active ? '#2ee6ff' : '#8ea3c4'}
               strokeWidth="1.5"
-              className="transition-all duration-700"
+              className={`transition-all duration-700 ${active ? 'fill-neon stroke-neon' : 'fill-panel stroke-steel'}`}
             />
             <text
               x={node.x}
               y={node.y + 22}
               textAnchor="middle"
-              className="font-mono"
+              className={`font-mono ${active ? 'fill-mist' : 'fill-steel'}`}
               fontSize="9"
               letterSpacing="1.5"
-              fill={active ? '#cfdcf0' : '#8ea3c4'}
             >
               {node.label}
             </text>

@@ -47,7 +47,7 @@ export function Technology() {
     <section id="technology" className="relative py-24 sm:py-32">
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-0 -z-10 h-96 bg-[radial-gradient(ellipse_60%_100%_at_50%_0%,rgb(76_125_255/0.12),transparent_70%)]"
+        className="glow-top absolute inset-x-0 top-0 -z-10 h-96"
       />
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <Reveal>
@@ -83,13 +83,13 @@ function ModuleCard({ module }: { module: (typeof MODULES)[number] }) {
         <span className="grid size-12 place-items-center border border-neon/30 bg-neon/5 text-neon">
           <Icon className="size-6" aria-hidden="true" />
         </span>
-        <p className="text-right font-mono text-[0.625rem] leading-relaxed tracking-[0.18em] text-steel/60 uppercase">
+        <p className="text-right font-mono text-[0.625rem] leading-relaxed tracking-[0.18em] text-steel uppercase">
           {module.id}
-          <span className="block text-plasma/80">{module.code}</span>
+          <span className="block text-plasma">{module.code}</span>
         </p>
       </header>
 
-      <h3 className="mt-7 text-xl text-white">{module.title}</h3>
+      <h3 className="mt-7 text-xl text-ink">{module.title}</h3>
       <p className="mt-3 grow text-[0.9375rem] leading-relaxed text-steel">{module.description}</p>
 
       <footer className="mt-7 flex items-center justify-between border-t border-line/70 pt-4">

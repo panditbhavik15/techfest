@@ -4,6 +4,7 @@ import { NAV_ITEMS, SECTIONS } from '../lib/site'
 import { btnPrimary } from '../lib/styles'
 import { useActiveSection } from '../hooks'
 import { Logo, StatusPill } from './ui'
+import { ThemeToggle } from './ThemeToggle'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -33,7 +34,7 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
-        <Logo />
+        <Logo compact />
 
         <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
           {NAV_ITEMS.map((item) => {
@@ -44,7 +45,7 @@ export function Navbar() {
                 href={item.href}
                 aria-current={isActive ? 'true' : undefined}
                 className={`relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors duration-300 ${
-                  isActive ? 'text-neon' : 'text-steel hover:text-white'
+                  isActive ? 'text-neon' : 'text-steel hover:text-ink'
                 }`}
               >
                 {item.label}
@@ -63,15 +64,20 @@ export function Navbar() {
           <span className="hidden xl:inline-flex">
             <StatusPill>System online</StatusPill>
           </span>
-          <a href="#contact" className={`${btnPrimary} hidden sm:inline-flex`}>
-            Enter the system
-          </a>
+          {/* Wrapped rather than given `hidden sm:inline-flex`: btnPrimary already sets
+              inline-flex, and Tailwind resolves that conflict by stylesheet order, not class order. */}
+          <span className="hidden sm:inline-flex">
+            <a href="#contact" className={btnPrimary}>
+              Enter the system
+            </a>
+          </span>
+          <ThemeToggle />
           <button
             type="button"
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls="mobile-nav"
-            className="inline-flex size-11 items-center justify-center border border-line bg-white/[0.03] text-mist transition-colors hover:border-neon/60 hover:text-neon lg:hidden"
+            className="inline-flex size-11 shrink-0 items-center justify-center border border-line bg-ink/5 text-mist transition-colors hover:border-neon/60 hover:text-neon lg:hidden"
           >
             <span className="sr-only">{open ? 'Close navigation menu' : 'Open navigation menu'}</span>
             {open ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
@@ -94,11 +100,11 @@ export function Navbar() {
               href={item.href}
               onClick={() => setOpen(false)}
               className={`flex min-h-12 items-center justify-between border-b border-line/60 py-3 font-mono text-sm tracking-[0.2em] uppercase transition-colors ${
-                active === item.sectionId ? 'text-neon' : 'text-steel hover:text-white'
+                active === item.sectionId ? 'text-neon' : 'text-steel hover:text-ink'
               }`}
             >
               {item.label}
-              <span aria-hidden="true" className="text-[0.625rem] text-steel/50">
+              <span aria-hidden="true" className="text-[0.625rem] text-steel">
                 {item.sectionId.toUpperCase()}
               </span>
             </a>

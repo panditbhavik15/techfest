@@ -12,7 +12,7 @@ export function CallToAction() {
     <section id="contact" className="relative overflow-clip py-24 sm:py-32">
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgb(76_125_255/0.16),transparent_70%)]"
+        className="glow-center absolute inset-0 -z-10"
       />
       <div className="mx-auto max-w-5xl px-5 sm:px-8">
         <Reveal>
@@ -20,7 +20,7 @@ export function CallToAction() {
             <div className="flex justify-center">
               <StatusPill tone="plasma">Uplink ready</StatusPill>
             </div>
-            <h2 className="mt-8 text-[clamp(2.1rem,6vw,3.5rem)] text-white">
+            <h2 className="mt-8 text-[clamp(2.1rem,6vw,3.5rem)] text-ink">
               The future is{' '}
               <span className="bg-gradient-to-r from-neon via-electric to-plasma bg-clip-text text-transparent">
                 not waiting.
@@ -34,15 +34,6 @@ export function CallToAction() {
                 <Sparkles className="size-4" aria-hidden="true" />
                 Begin your evolution
               </button>
-              <a
-                href={REPO_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-12 items-center gap-2 font-mono text-xs tracking-[0.2em] text-steel uppercase transition-colors hover:text-neon"
-              >
-                View source
-                <ArrowUpRight className="size-4" aria-hidden="true" />
-              </a>
             </div>
           </div>
         </Reveal>
@@ -120,7 +111,7 @@ function EvolutionDialog({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <h3 id="evolution-title" className="mt-5 text-2xl text-white sm:text-3xl">
+        <h3 id="evolution-title" className="mt-5 text-2xl text-ink sm:text-3xl">
           Welcome to CYBERCORE.
         </h3>
         <p className="mt-4 text-[0.9375rem] leading-relaxed text-steel">
@@ -136,7 +127,7 @@ function EvolutionDialog({ onClose }: { onClose: () => void }) {
             Open repository
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
-          <button type="button" onClick={onClose} className="inline-flex min-h-12 items-center px-2 font-mono text-xs tracking-[0.2em] text-steel uppercase transition-colors hover:text-white">
+          <button type="button" onClick={onClose} className="inline-flex min-h-12 items-center px-2 font-mono text-xs tracking-[0.2em] text-steel uppercase transition-colors hover:text-ink">
             Return to interface
           </button>
         </div>

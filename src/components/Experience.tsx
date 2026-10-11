@@ -37,7 +37,7 @@ export function Experience() {
               {imageFailed ? (
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(ellipse_at_60%_30%,rgb(168_85_247/0.4),transparent_60%),radial-gradient(ellipse_at_30%_70%,rgb(46_230_255/0.4),transparent_55%)]"
+                  className="art-wash-alt absolute inset-0"
                 />
               ) : (
                 <img
@@ -95,11 +95,11 @@ export function Experience() {
             {HIGHLIGHTS.map((highlight, index) => (
               <Reveal key={highlight.title} delay={180 + index * 90}>
                 <li className="group flex gap-5 border-l border-line pl-5 transition-colors duration-300 hover:border-neon/70">
-                  <span className="mt-0.5 grid size-10 shrink-0 place-items-center border border-line bg-white/[0.03] text-neon transition-colors duration-300 group-hover:border-neon/50">
+                  <span className="mt-0.5 grid size-10 shrink-0 place-items-center border border-line bg-ink/5 text-neon transition-colors duration-300 group-hover:border-neon/50">
                     <highlight.icon className="size-5" aria-hidden="true" />
                   </span>
                   <div>
-                    <h3 className="text-lg text-white">{highlight.title}</h3>
+                    <h3 className="text-lg text-ink">{highlight.title}</h3>
                     <p className="mt-1 text-[0.9375rem] text-steel">{highlight.text}</p>
                   </div>
                 </li>

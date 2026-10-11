@@ -4,8 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#04060c" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" />
+    <script>
+      // Runs before first paint so a stored dark choice never flashes white.
+      (function () {
+        try {
+          var dark = window.localStorage.getItem('cybercore-theme') === 'dark'
+          document.documentElement.classList.toggle('dark', dark)
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+        } catch {
+          /* localStorage unavailable — stay on the light default */
+        }
+      })()
+    </script>
     <title>CYBERCORE — The Future of Human-Machine Evolution</title>
     <meta
       name="description"

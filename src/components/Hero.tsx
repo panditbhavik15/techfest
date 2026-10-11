@@ -55,7 +55,7 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={90}>
-            <h1 className="mt-8 text-[clamp(2.9rem,9vw,5.75rem)] leading-[0.92] font-bold tracking-[-0.02em] text-white">
+            <h1 className="mt-8 text-[clamp(2.9rem,9vw,5.75rem)] leading-[0.92] font-bold tracking-[-0.02em] text-ink">
               <span className="block">Humanity</span>
               <span className="relative block bg-gradient-to-r from-neon via-electric to-plasma bg-clip-text text-transparent">
                 Redefined.
@@ -64,7 +64,7 @@ export function Hero() {
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="mt-7 max-w-xl font-display text-lg tracking-wide text-neon/90 sm:text-xl">
+            <p className="mt-7 max-w-xl font-display text-lg tracking-wide text-neon sm:text-xl">
               Beyond the limits of biology. Enter the age of cybernetic evolution.
             </p>
           </Reveal>
@@ -124,7 +124,7 @@ export function Hero() {
               {imageFailed ? (
                 <div
                   aria-hidden="true"
-                  className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgb(46_230_255/0.35),transparent_60%),radial-gradient(ellipse_at_60%_80%,rgb(168_85_247/0.35),transparent_55%)]"
+                  className="art-wash absolute inset-0"
                 />
               ) : (
                 <img
