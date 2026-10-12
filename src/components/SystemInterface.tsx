@@ -54,7 +54,7 @@ export function SystemInterface() {
         <Reveal delay={140}>
           <div className="hud-panel hud-corner mt-14 grid gap-10 p-7 sm:p-10 lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]">
             <div className="flex flex-col items-center gap-8">
-              <div className="radar relative size-64 shrink-0" data-active={active}>
+              <div className="radar relative size-[min(16rem,100%)] shrink-0" data-active={active}>
                 <div aria-hidden="true" className="absolute inset-0 rounded-full border border-line" />
                 <div aria-hidden="true" className="absolute inset-[14%] rounded-full border border-line/80" />
                 <div aria-hidden="true" className="absolute inset-[30%] rounded-full border border-line/60" />

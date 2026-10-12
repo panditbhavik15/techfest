@@ -222,11 +222,6 @@ html.dark {
       radial-gradient(ellipse 55% 45% at 18% 72%, var(--wash-plasma), transparent 70%);
   }
 
-  /* Cursor-reactive lighting, desktop only. */
-  .pointer-glow {
-    background: radial-gradient(340px circle at var(--mx, 50%) var(--my, 20%), var(--glow-soft), transparent 70%);
-  }
-
   /* Gradient washes used where artwork cannot load. */
   .art-wash {
     background:
@@ -362,21 +357,6 @@ html.dark {
   .radar[data-active='true'] .radar-sweep {
     animation-duration: 1.8s;
   }
-
-  /* ---------- scroll reveal ---------- */
-
-  .reveal {
-    opacity: 0;
-    transform: translate3d(0, 26px, 0);
-    transition:
-      opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-  .reveal[data-visible='true'] {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 /* ---------- keyframes (unlayered so they always win) ---------- */
@@ -458,10 +438,6 @@ html.dark {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  .reveal {
-    opacity: 1;
-    transform: none;
   }
   .particle,
   .anim-scan {

@@ -1,4 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import {
+  MotionConfig,
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from 'framer-motion'
 import { CallToAction } from './components/CallToAction'
 import { Experience } from './components/Experience'
 import { Footer } from './components/Footer'
@@ -7,37 +15,36 @@ import { Navbar } from './components/Navbar'
 import { Stats } from './components/Stats'
 import { SystemInterface } from './components/SystemInterface'
 import { Technology } from './components/Technology'
-import { useFinePointer, useReducedMotion } from './hooks'
+import { useFinePointer } from './hooks'
 
 export default function App() {
-  const glowRef = useRef<HTMLDivElement>(null)
+  return (
+    <MotionConfig reducedMotion="user">
+      <Page />
+    </MotionConfig>
+  )
+}
+
+function Page() {
   const finePointer = useFinePointer()
-  const reducedMotion = useReducedMotion()
+  const reducedMotion = useReducedMotion() ?? false
+  const lit = finePointer && !reducedMotion
+
+  const pointerX = useMotionValue(-999)
+  const pointerY = useMotionValue(-999)
+  const glowX = useSpring(pointerX, { stiffness: 140, damping: 30, mass: 0.4 })
+  const glowY = useSpring(pointerY, { stiffness: 140, damping: 30, mass: 0.4 })
+  const glow = useMotionTemplate`radial-gradient(340px circle at ${glowX}px ${glowY}px, var(--glow-soft), transparent 70%)`
 
   useEffect(() => {
-    if (!finePointer || reducedMotion) return
-    let frame = 0
-    let point = { x: 0, y: 0 }
-
-    const apply = () => {
-      frame = 0
-      const node = glowRef.current
-      if (!node) return
-      node.style.setProperty('--mx', `${point.x}px`)
-      node.style.setProperty('--my', `${point.y}px`)
-    }
-
+    if (!lit) return
     const onPointerMove = (event: PointerEvent) => {
-      point = { x: event.clientX, y: event.clientY }
-      if (!frame) frame = requestAnimationFrame(apply)
+      pointerX.set(event.clientX)
+      pointerY.set(event.clientY)
     }
-
     window.addEventListener('pointermove', onPointerMove, { passive: true })
-    return () => {
-      window.removeEventListener('pointermove', onPointerMove)
-      if (frame) cancelAnimationFrame(frame)
-    }
-  }, [finePointer, reducedMotion])
+    return () => window.removeEventListener('pointermove', onPointerMove)
+  }, [lit, pointerX, pointerY])
 
   return (
     <div className="relative min-h-svh">
@@ -48,12 +55,10 @@ export default function App() {
         Skip to content
       </a>
 
-      <div
-        ref={glowRef}
+      <motion.div
         aria-hidden="true"
-        className={`pointer-glow pointer-events-none fixed inset-0 z-0 hidden lg:block ${
-          finePointer && !reducedMotion ? 'opacity-100' : 'opacity-0'
-        }`}
+        style={{ background: glow, opacity: lit ? 1 : 0 }}
+        className="pointer-events-none fixed inset-0 z-0 hidden lg:block"
       />
 
       <Navbar />

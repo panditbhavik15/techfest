@@ -27,7 +27,7 @@ CYBERCORE is a single-page, production-ready front-end experience for a technolo
 | Build tool | Vite 8 (`@vitejs/plugin-react`) |
 | Styling | Tailwind CSS v4 via `@tailwindcss/vite`, design tokens in `@theme`, custom CSS keyframes |
 | Icons | `lucide-react` |
-| Motion | CSS animations + `IntersectionObserver` (no animation library needed) |
+| Motion | `framer-motion` (`whileInView` reveals, count-up telemetry, cursor lighting) + CSS keyframes for the ambient HUD loops |
 | Imagery | Locally generated, WebP-compressed assets imported through the bundler |
 | Fonts | Self-hosted latin subsets of Chakra Petch, Rajdhani and Share Tech Mono (SIL OFL) |
 
@@ -68,7 +68,7 @@ npm run dev       # start the dev server (http://localhost:5173)
     ├── index.css              # Tailwind import, design tokens, keyframes, HUD styles
     ├── fonts.css              # @font-face rules for the self-hosted subsets
     ├── fonts/                 # .woff2 subsets
-    ├── hooks.ts               # useTheme, useReducedMotion, useFinePointer, useInView, useCountUp, useActiveSection
+    ├── hooks.ts               # useTheme, useFinePointer, useActiveSection (motion state comes from framer-motion)
     ├── lib/
     │   ├── site.ts            # nav model, section ids, repository URL
     │   └── styles.ts          # shared button / HUD label class tokens
@@ -83,7 +83,7 @@ npm run dev       # start the dev server (http://localhost:5173)
         ├── Experience.tsx
         ├── CallToAction.tsx   # includes the accessible modal dialog
         ├── Footer.tsx
-        ├── Reveal.tsx         # scroll-reveal wrapper
+        ├── Reveal.tsx         # framer-motion whileInView scroll-reveal wrapper
         └── ui.tsx             # Logo, StatusDot, StatusPill, SectionHeading
 ```
 
@@ -128,21 +128,21 @@ To add a third theme, copy the `html.dark` block to `html.oled` with new values 
 
 ## Accessibility
 
-- Both themes were audited programmatically: **122 visible text nodes per theme all meet WCAG 2 AA** (4.5:1 for small text, 3:1 for large) against their composited backgrounds; accent colours were darkened for light mode rather than reused from the dark palette.
+- Both themes were audited programmatically: **136 visible text nodes per theme all meet WCAG 2 AA** (4.5:1 for small text, 3:1 for large) against their composited backgrounds — gradient-clipped display text is checked against every stop of its gradient. Accent colours were darkened for light mode rather than reused from the dark palette.
 - One `h1`, section `h2`s, card `h3`s; landmarks (`header`, `nav`, `main`, `footer`) plus a skip-to-content link.
 - The theme control is a real `button` with an `aria-label`/`title` that states the full action (`Switch to Dark Mode` / `Switch to Light Mode`) at every width; the visible text shortens on narrow screens so the header never pushes the menu button out of reach.
 - All interactive elements are real `button`/`a` elements with visible `:focus-visible` outlines and ≥ 40 px touch targets.
 - The system panel uses `aria-pressed` on the toggle, `role="progressbar"` with live `aria-valuenow`, and an `aria-live="polite"` status line.
 - The modal uses `role="dialog"`, `aria-modal`, initial focus, a Tab focus trap, `Escape`/backdrop close and focus restoration.
 - Decorative SVGs, rings and particles are `aria-hidden`; both images carry descriptive alt text and fall back to a CSS-only gradient panel if decoding ever fails.
-- `prefers-reduced-motion: reduce` removes particles, scanning beams, reveal transitions and smooth scrolling.
+- `prefers-reduced-motion: reduce` removes particles, scanning beams and smooth scrolling; `<MotionConfig reducedMotion="user">` plus an explicit `useReducedMotion()` check make the reveals, count-ups and cursor lighting render their final state with no animation at all.
 
 ## Performance
 
 - Hero and experience visuals are pre-compressed WebP (≈ 50–104 KB each, down from ~2 MB PNGs) with `srcset`/`sizes`; the below-the-fold image is `loading="lazy"`.
 - Images declare `width`/`height` and the hero uses `fetchpriority="high"`, so there is no layout shift.
-- Animation is CSS-only and limited to transform/opacity; the pointer-lighting handler is `requestAnimationFrame`-throttled and never attaches on coarse pointers.
-- Production bundle: ~82 KB gzipped JS and ~9.5 KB gzipped CSS.
+- Motion is limited to transform/opacity. framer-motion animates the reveals and telemetry through motion values, so the count-up never re-renders React per frame, and the cursor lighting writes two spring values instead of running a `requestAnimationFrame` loop; it never attaches on coarse pointers.
+- Production bundle: ~128 KB gzipped JS (framer-motion is ~45 KB of that) and ~9.6 KB gzipped CSS.
 
 ## Screenshots
 
