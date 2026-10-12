@@ -57,6 +57,7 @@ npm run dev       # start the dev server (http://localhost:5173)
 
 ```
 .
+├── LICENSE                    # MIT (c) 2026 panditbhavik15
 ├── index.html                 # metadata, OG tags, theme color, root mount
 ├── vite.config.ts             # react + tailwind plugins, relative base
 ├── public/
@@ -202,6 +203,6 @@ Not generated automatically. To capture the submission clip (30–60 s):
 
 ## Credit & license
 
+- Code is licensed under the **MIT License** — see [`LICENSE`](LICENSE).
 - Imagery was generated for this project and stored locally in `src/assets/` and `public/`.
-- Fonts are subsets of Chakra Petch, Rajdhani and Share Tech Mono under the SIL Open Font License.
-- **No license file has been added yet, so all rights are reserved.** Add one (MIT is a common choice for a showcase) before publishing the repository publicly if you want others to reuse the code.
+- Fonts are self-hosted latin subsets of Chakra Petch, Rajdhani and Share Tech Mono and remain under the **SIL Open Font License 1.1**, which the MIT grant does not override; keep their licence notice if you redistribute them.
